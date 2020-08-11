@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/Home"
+        android:enabled="true"
+        android:icon="@drawable/ic_home"
+        android:title="@string/nav_home"/>
+
+    <item
+        android:id="@+id/add"
+        android:enabled="true"
+        android:icon="@drawable/ic_add_post"
+        android:title="@string/nav_add"/>
+
+    <item
+        android:id="@+id/Me"
+        android:enabled="true"
+        android:icon="@drawable/ic_me"
+        android:title="@string/nav_me"/>
+
+</menu>

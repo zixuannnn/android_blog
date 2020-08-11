@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "406639340503",
+    "firebase_url": "https://blog-bedec.firebaseio.com",
+    "project_id": "blog-bedec",
+    "storage_bucket": "blog-bedec.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:406639340503:android:c36cc3a5ae1cebdc467992",
+        "android_client_info": {
+          "package_name": "com.example.blog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "406639340503-1q6to0h3i908micoql7ia46hdmgfgjov.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.blog",
+            "certificate_hash": "50431e534f66bd2db9ad4afb3a6af8bf28d40847"
+          }
+        },
+        {
+          "client_id": "406639340503-c6p5h3rmoi2970g7ko1eo3n4vb7p3lo9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAs6txbUrxvBTnsBSJavf0zI_YbpYOw0fA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "406639340503-c6p5h3rmoi2970g7ko1eo3n4vb7p3lo9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

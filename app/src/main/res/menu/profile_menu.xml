@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/Post"
+        android:enabled="true"
+        android:icon="@drawable/ic_image"
+        android:title="Posts"/>
+
+    <item
+        android:id="@+id/Like"
+        android:enabled="true"
+        android:icon="@drawable/ic_collections"
+        android:title="Likes"/>
+
+</menu>
