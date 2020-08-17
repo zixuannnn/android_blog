@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.blog.Fragment.LikeFragment;
+import com.example.blog.Fragment.PostFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -139,13 +140,20 @@ public class ProfileActivity extends AppCompatActivity
     private BottomNavigationView.OnNavigationItemSelectedListener listener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            Fragment fragment = null;
+
+            Bundle bundle = new Bundle();
+            bundle.putString("uid", currentUser.getUid());
+            bundle.putString("email", currentUser.getEmail());
+            Fragment fragment = new PostFragment();
+            fragment.setArguments(bundle);
 
             if(menuItem.getItemId() == R.id.Post){
-                //fragment = new PostFragment();
+                fragment = new PostFragment();
+                fragment.setArguments(bundle);
             }
             else if(menuItem.getItemId() == R.id.Like){
                 fragment = new LikeFragment();
+                fragment.setArguments(bundle);
             }
 
             getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();

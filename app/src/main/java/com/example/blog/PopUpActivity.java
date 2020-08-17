@@ -3,7 +3,6 @@ package com.example.blog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -12,16 +11,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.example.blog.Model.Database;
 import com.example.blog.Model.Post;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
@@ -31,7 +29,7 @@ public class PopUpActivity extends AppCompatActivity{
     private ImageButton post;
     private Button search;
     private ImageView picture;
-    private EditText title;
+    private EditText title, intro;
     private ProgressBar progress;
     private FirebaseUser user;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -59,15 +57,15 @@ public class PopUpActivity extends AppCompatActivity{
         search = (Button)findViewById(R.id.search);
         post = (ImageButton) findViewById(R.id.post);
         title = (EditText)findViewById(R.id.title);
-        picture = (ImageView)findViewById(R.id.picture);
-        progress = (ProgressBar)findViewById(R.id.progress);
+        intro = findViewById(R.id.intro);
+        picture = findViewById(R.id.picture);
+        progress = findViewById(R.id.progress);
 
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 progress.setVisibility(View.VISIBLE);
-                if(!title.getText().toString().isEmpty() && pickedImgUri
-                        != null){
+                if(!title.getText().toString().isEmpty() && pickedImgUri != null){
                     uploadFile();
                     updateHomeUI();
                     showMessage("Upload successfully");
@@ -134,42 +132,10 @@ public class PopUpActivity extends AppCompatActivity{
     }
 
     private void uploadFile() {
-        StorageReference fileReference = storageReference.child("blogImages");
-        final StorageReference imageFilePath = fileReference.child(pickedImgUri.getLastPathSegment());
-        final Date currentTime = Calendar.getInstance().getTime();
-        imageFilePath.putFile(pickedImgUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                databaseRef = database.getReference("Posts").push();
-                                String uploadId = databaseRef.getKey();
-                                Post upload = new Post(title.getText().toString(), uri.toString(), uploadId, user.getEmail(), currentTime);
-                                databaseRef.setValue(upload).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        showMessage("Upload to database Failed!");
-                                    }
-                                });
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                showMessage("Upload Failed");
-                                System.out.println("=====================");
-                                System.out.println(e.toString());
-                                System.out.println("=====================");
-                            }
-                        });
-                    }
-                });
+        Date currentTime = Calendar.getInstance().getTime();
+        Post upload = new Post(title.getText().toString(), null, null, user.getEmail(), currentTime, intro.getText().toString());
+        Database d = Database.getDatabase();
+        d.savePostToStorageAndDatabase(pickedImgUri, upload, getApplicationContext());
 
     }
 

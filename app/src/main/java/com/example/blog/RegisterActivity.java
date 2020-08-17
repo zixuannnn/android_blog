@@ -11,14 +11,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.blog.Model.Database;
 import com.example.blog.Model.UserDetail;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -113,23 +112,26 @@ public class RegisterActivity extends AppCompatActivity {
 //    }
 
     private void saveIntoDatabase(String id, String username, String email, String password){
-        database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("Users").child(id);
+//        database = FirebaseDatabase.getInstance();
+//        DatabaseReference ref = database.getReference("Users").child(id);
+//        UserDetail user = new UserDetail(username, email, password, id);
+//        ref.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Void> task) {
+//                showMessage("Stored Successfully");
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                showMessage("Stored Failed");
+//                System.out.println("=====================");
+//                System.out.println(e);
+//                System.out.println("=====================");
+//            }
+//        });
         UserDetail user = new UserDetail(username, email, password, id);
-        ref.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                showMessage("Stored Successfully");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                showMessage("Stored Failed");
-                System.out.println("=====================");
-                System.out.println(e);
-                System.out.println("=====================");
-            }
-        });
+        Database d = Database.getDatabase();
+        d.saveToUserDetail(user, id, getApplicationContext());
 
         finish();
     }

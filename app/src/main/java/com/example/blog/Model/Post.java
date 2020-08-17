@@ -8,16 +8,18 @@ public class Post {
     private String postKey;
     private String mEmail;
     private Date mTime;
+    private String intro;
 
     public Post() {
         //empty constructor needed
     }
-    public Post(String name, String imageUrl, String key, String email, Date time) {
+    public Post(String name, String imageUrl, String key, String email, Date time, String intro) {
         mName = name;
         mImageUrl = imageUrl;
         postKey = key;
         mEmail = email;
         mTime = time;
+        this.intro = intro;
     }
     public String getName() {
         return mName;
@@ -42,6 +44,12 @@ public class Post {
     }
     public Date getmTime(){
         return mTime;
+    }
+    public void setIntro(String intro){
+        this.intro = intro;
+    }
+    public String getIntro(){
+        return intro;
     }
 
 }

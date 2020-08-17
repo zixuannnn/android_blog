@@ -61,7 +61,8 @@ public class SearchActivity extends AppCompatActivity {
                     String email = user.child("email").getValue(String.class);
                     String pwd = user.child("password").getValue(String.class);
                     UserDetail u = new UserDetail(name, email, pwd, key);
-                    u.setPhoto(Uri.parse(url));
+                    if(url != null)
+                        u.setPhoto(Uri.parse(url));
                     list.add(u);
                 }
 

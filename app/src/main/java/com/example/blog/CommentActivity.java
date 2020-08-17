@@ -14,8 +14,7 @@ import android.widget.Toast;
 
 import com.example.blog.Adapter.CommentAdapter;
 import com.example.blog.Model.Comment;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.blog.Model.Database;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -96,26 +95,9 @@ public class CommentActivity extends AppCompatActivity {
     }
 
     private void addComment(FirebaseUser user, String postId, String comment, Date date) {
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference().child("Posts").child(postId).child("Comments").push();
-
         Comment c = new Comment(comment, user.getEmail(), date);
-//        map.put("comment", comment);
-//        map.put("publisher", user.getEmail());
-//        map.put("userId", user.getUid());
-        ref.setValue(c).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                showMessage("Stored Successfully");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                showMessage("Stored Failed");
-            }
-        });
-
+        Database d = Database.getDatabase();
+        d.saveToComment(c, postId, getApplicationContext());
     }
 
     @Override

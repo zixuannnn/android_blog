@@ -1,6 +1,7 @@
 package com.example.blog.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.blog.Model.UserDetail;
+import com.example.blog.OthersProfilePageActivity;
 import com.example.blog.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,6 +32,7 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Se
     public FirebaseUser user;
     public FirebaseDatabase database;
     public DatabaseReference refPost, refUser;
+    public String uid;
 
     public SearchUserAdapter(Context context, List<UserDetail> list){
         this.context = context;
@@ -52,9 +55,9 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Se
         UserDetail user = list.get(i);
         String username = user.getUsername();
         String email = user.getEmail();
-        Uri uri = user.getPhoto();
+        uid = user.getId();
 
-        showMessage(username);
+        Uri uri = user.getPhoto();
 
         holder.username.setText(username);
         holder.email.setText(email);
@@ -74,8 +77,20 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Se
         private TextView email;
         private LinearLayout linear1, linear2;
 
-        public SearchUserViewHolder(@NonNull View itemView) {
+        public SearchUserViewHolder(@NonNull final View itemView) {
             super(itemView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, OthersProfilePageActivity.class);
+                    intent.putExtra("user", username.getText().toString());
+                    intent.putExtra("email", email.getText().toString());
+                    intent.putExtra("uid", uid);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+            });
 
             linear1 = itemView.findViewById(R.id.linear1);
             linear2 = linear1.findViewById(R.id.linear2);

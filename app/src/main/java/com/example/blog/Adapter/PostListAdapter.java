@@ -57,6 +57,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         final String email = p.getmEmail();
         final String uri = p.getImageUrl();
         final String title = p.getName();
+        final String detail = p.getIntro();
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -65,6 +66,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         like(postId, holder.liked);
         holder.name.setText(email.split("@")[0]);
         Picasso.get().load(uri).into(holder.image);
+        //holder.details.setEllipsize(TextUtils.TruncateAt.valueOf("END"));
+        holder.details.setText(detail);
 
         holder.liked.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,7 +107,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         refPost.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child(user.getUid()).exists()) {
+                if(user != null && dataSnapshot.child(user.getUid()).exists()) {
                     liked.setImageResource(R.drawable.ic_liked);
                     liked.setTag("liked");
                 }
@@ -128,6 +131,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
 
     public class PostViewHolder extends RecyclerView.ViewHolder{
         public TextView name;
+        public TextView details;
         public ImageView image;
         public ImageView liked;
         public ImageView comment;
@@ -139,6 +143,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             image = view.findViewById(R.id.imagePost);
             liked = view.findViewById(R.id.like);
             comment = view.findViewById(R.id.comment);
+            details = view.findViewById(R.id.details);
         }
     }
 

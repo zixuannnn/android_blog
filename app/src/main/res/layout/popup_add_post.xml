@@ -10,26 +10,39 @@
     <EditText
         android:id="@+id/title"
         android:layout_width="406dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="128dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:hint="Title..."
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <EditText
+        android:id="@+id/intro"
+        android:layout_width="411dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:gravity="bottom"
+        android:hint="Say something about the post..."
+        app:layout_constraintBottom_toTopOf="@+id/picture"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
     <ImageView
         android:id="@+id/picture"
-        android:layout_width="400dp"
-        android:layout_height="288dp"
-        android:layout_marginEnd="3dp"
-        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
         app:layout_constraintBottom_toTopOf="@+id/progress"
-        app:layout_constraintTop_toBottomOf="@+id/title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/intro"
         app:layout_constraintVertical_bias="0.0"
         tools:srcCompat="@tools:sample/backgrounds/scenic[11]" />
 
@@ -38,15 +51,15 @@
         android:layout_width="54dp"
         android:layout_height="56dp"
         android:layout_marginStart="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/cycle_button"
         android:padding="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/picture"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/picture"
-        app:layout_constraintBottom_toBottomOf="@+id/picture"
+        app:layout_constraintVertical_bias="0.16"
         app:srcCompat="@drawable/ic_create_black_24dp" />
 
     <ProgressBar
@@ -54,16 +67,12 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="32dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/search"
-        app:layout_constraintEnd_toEndOf="@+id/post"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/post"
+        app:layout_constraintTop_toBottomOf="@+id/picture"
         app:layout_constraintTop_toTopOf="@+id/post"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteX="181dp" />
 
     <Button
         android:id="@+id/search"
