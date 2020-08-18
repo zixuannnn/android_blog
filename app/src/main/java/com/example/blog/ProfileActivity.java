@@ -99,6 +99,8 @@ public class ProfileActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         bottomNavigation.setOnNavigationItemSelectedListener(listener);
 
+        //FirebaseMessaging.getInstance().subscribeToTopic(currentUser.getUid());
+
         if(mAuth != null && currentUser != null){
             updateNavigationBar();
             updateLinearLayout();
@@ -280,8 +282,8 @@ public class ProfileActivity extends AppCompatActivity
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 username.setText(dataSnapshot.child("username").getValue(String.class));
                 email.setText(dataSnapshot.child("email").getValue(String.class));
-                follower.setText("0 followers\t");        //  Feature Will Be Added Later
-                following.setText("0 followings\t");      //  Feature Will Be Added Later
+                follower.setText(dataSnapshot.child("follower").getValue(int.class)+" followers\t");
+                following.setText(dataSnapshot.child("following").getValue(int.class)+" followings\t");
                 String uri = dataSnapshot.child("photo").getValue(String.class);
                 if(uri != null ){
                     Picasso.get().load(uri).into(photo2);

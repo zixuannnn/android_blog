@@ -16,6 +16,10 @@ import android.widget.Toast;
 
 import com.example.blog.Fragment.LikeFragment;
 import com.example.blog.Fragment.PostFragment;
+import com.example.blog.Notification.Observer;
+import com.example.blog.Notification.ObserverAction;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +37,9 @@ public class OthersProfilePageActivity extends AppCompatActivity {
     private Button follow;
     private Intent intent;
     private Bundle bundle;
+    private Observer observer;
+    private FirebaseUser currentUser;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +48,11 @@ public class OthersProfilePageActivity extends AppCompatActivity {
 
         intent = getIntent();
 
+        observer = new ObserverAction();
+
         database = FirebaseDatabase.getInstance();
+        auth = FirebaseAuth.getInstance();
+        currentUser = auth.getCurrentUser();
 
         linear1 = findViewById(R.id.profile_linear1);
         child_linear1 = linear1.findViewById(R.id.child_linear1);
@@ -74,7 +85,9 @@ public class OthersProfilePageActivity extends AppCompatActivity {
         follow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showMessage("Feature will be added later");
+                observer.NotificationAfterNewFollow(currentUser.getEmail()+" is following you now",getApplicationContext(), intent.getStringExtra("uid"));
+                observer.IncreaseFollowingFollower(currentUser.getUid(), intent.getStringExtra("uid"), intent.getStringExtra("email"), currentUser.getEmail());
+                updateLinearLayout();
             }
         });
 
@@ -83,10 +96,6 @@ public class OthersProfilePageActivity extends AppCompatActivity {
     private BottomNavigationView.OnNavigationItemSelectedListener listener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
-            //Bundle bundle = new Bundle();
-            //bundle.putString("uid", intent.getStringExtra("uid"));
-            //bundle.putString("email", intent.getStringExtra("email"));
 
             Fragment fragment = new PostFragment();
             fragment.setArguments(bundle);
@@ -113,8 +122,8 @@ public class OthersProfilePageActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 username.setText(dataSnapshot.child("username").getValue(String.class));
                 email.setText(dataSnapshot.child("email").getValue(String.class));
-                follower.setText("0 followers\t");        //  Feature Will Be Added Later
-                following.setText("0 followings\t");      //  Feature Will Be Added Later
+                follower.setText(dataSnapshot.child("follower").getValue(int.class)+" followers\t");        //  Feature Will Be Added Later
+                following.setText(dataSnapshot.child("following").getValue(int.class)+" followings\t");      //  Feature Will Be Added Later
                 String uri = dataSnapshot.child("photo").getValue(String.class);
                 if(uri != null ){
                     Picasso.get().load(uri).into(photo);

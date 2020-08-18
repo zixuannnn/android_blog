@@ -7,12 +7,15 @@ public class UserDetail {
     private String password;
     private String id;
     private Uri photo = null;
+    private int follower, following;
 
     public UserDetail(String username, String email, String password, String id){
         this.username = username;
         this.email = email;
         this.password = password;
         this.id = id;
+        this.follower = 0;
+        this.following = 0;
     }
 
     public String getUsername(){
@@ -53,5 +56,18 @@ public class UserDetail {
 
     public Uri getPhoto(){
         return photo;
+    }
+
+    public int getFollower(){
+        return follower;
+    }
+    public int getFollowing(){
+        return following;
+    }
+    public void increaseFollower(){
+        follower += 1;
+    }
+    public void increaseFollowing(){
+        following += 1;
     }
 }
