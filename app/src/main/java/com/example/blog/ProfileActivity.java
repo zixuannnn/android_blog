@@ -49,6 +49,7 @@ public class ProfileActivity extends AppCompatActivity
     private BottomNavigationView bottomNavigation;
     private LinearLayout linear1, child_linear1, child_linear2, child_linear11;
     private View header;
+    private Bundle bundle;
     private FirebaseStorage storage;
     private DrawerLayout drawer;
     private TextView username, email, following, follower;
@@ -99,12 +100,19 @@ public class ProfileActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         bottomNavigation.setOnNavigationItemSelectedListener(listener);
 
-        //FirebaseMessaging.getInstance().subscribeToTopic(currentUser.getUid());
-
         if(mAuth != null && currentUser != null){
             updateNavigationBar();
             updateLinearLayout();
         }
+
+        bundle = new Bundle();
+        bundle.putString("uid", currentUser.getUid());
+        bundle.putString("email", currentUser.getEmail());
+        Fragment fragment = new PostFragment();
+        fragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainer, fragment)
+                .commit();
 
         photo1.setOnClickListener(new View.OnClickListener() {
             @Override

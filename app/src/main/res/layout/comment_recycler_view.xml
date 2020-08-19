@@ -35,10 +35,11 @@
 
         <ImageButton
             android:id="@+id/postComment"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_toRightOf="@+id/comment"
             android:background="@drawable/ic_send"
+            android:layout_gravity="center"
             tools:srcCompat="@tools:sample/avatars[14]"
             />
 

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.blog.CommentActivity;
 import com.example.blog.Model.Post;
+import com.example.blog.PostDetailActivity;
 import com.example.blog.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,6 +34,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     public FirebaseUser user;
     public FirebaseDatabase database;
     public DatabaseReference refPost, refUser;
+    private String postId, email, title, uri;
 
     public PostListAdapter(Context context, List<Post> list){
         this.context = context;
@@ -53,11 +55,11 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     public void onBindViewHolder(final PostViewHolder holder, final int index) {
 
         Post p = list.get(index);
-        final String postId = p.getPostKey();
-        final String email = p.getmEmail();
-        final String uri = p.getImageUrl();
-        final String title = p.getName();
+        this.uri = p.getImageUrl();
         final String detail = p.getIntro();
+        this.postId = p.getPostKey();
+        this.email = p.getmEmail();
+        this.title = p.getName();
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -138,6 +140,20 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
 
         public PostViewHolder(View view){
             super(view);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, PostDetailActivity.class);
+                    intent.putExtra("username", name.getText().toString());
+                    intent.putExtra("postId", postId);
+                    intent.putExtra("email", email);
+                    intent.putExtra("title", title);
+                    intent.putExtra("uri", uri);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+            });
 
             name = view.findViewById(R.id.name);
             image = view.findViewById(R.id.imagePost);
