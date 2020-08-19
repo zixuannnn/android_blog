@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.blog.Fragment.LikeFragment;
 import com.example.blog.Fragment.PostFragment;
+import com.example.blog.Model.UserDetail;
 import com.example.blog.Notification.Observer;
 import com.example.blog.Notification.ObserverAction;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,10 +28,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class OthersProfilePageActivity extends AppCompatActivity {
 
     private ImageView photo;
     private FirebaseDatabase database;
+    private DatabaseReference ref;
     private BottomNavigationView bottomNavigation;
     private LinearLayout linear1, child_linear1, child_linear2, child_linear11;
     private TextView username, email, following, follower;
@@ -40,6 +45,7 @@ public class OthersProfilePageActivity extends AppCompatActivity {
     private Observer observer;
     private FirebaseUser currentUser;
     private FirebaseAuth auth;
+    private List<UserDetail> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +77,8 @@ public class OthersProfilePageActivity extends AppCompatActivity {
 
         bottomNavigation.setOnNavigationItemSelectedListener(listener);
 
+        list = new ArrayList<>();
+
         updateLinearLayout();
 
         bundle = new Bundle();
@@ -88,6 +96,26 @@ public class OthersProfilePageActivity extends AppCompatActivity {
                 observer.NotificationAfterNewFollow(currentUser.getEmail()+" is following you now",getApplicationContext(), intent.getStringExtra("uid"));
                 observer.IncreaseFollowingFollower(currentUser.getUid(), intent.getStringExtra("uid"), intent.getStringExtra("email"), currentUser.getEmail());
                 updateLinearLayout();
+            }
+        });
+
+        follower.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent2 = new Intent(OthersProfilePageActivity.this, SearchActivity.class);
+                intent2.putExtra("uid", intent.getStringExtra("uid"));
+                intent2.putExtra("search", "follower");
+                startActivity(intent2);
+            }
+        });
+
+        following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent2 = new Intent(OthersProfilePageActivity.this, SearchActivity.class);
+                intent2.putExtra("uid", intent.getStringExtra("uid"));
+                intent2.putExtra("search", "following");
+                startActivity(intent2);
             }
         });
 
@@ -141,8 +169,4 @@ public class OthersProfilePageActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
     }
 
-//    @Override
-//    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-//        return false;
-//    }
 }

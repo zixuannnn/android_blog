@@ -93,7 +93,10 @@
             <Button
                 android:id="@+id/updateProfile"
                 android:layout_width="wrap_content"
+                android:padding="15dp"
+                android:layout_gravity="center"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button"
                 android:gravity="center"
                 android:text="Update Profile" />
         </LinearLayout>

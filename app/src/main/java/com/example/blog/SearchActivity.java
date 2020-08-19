@@ -25,10 +25,12 @@ public class SearchActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private DatabaseReference ref;
+    private DatabaseReference ref, ref2;
     private List<UserDetail> list = new ArrayList<>();
+    private List<String> key = new ArrayList<>();
     private FirebaseDatabase database;
-    private String username;
+    private String username, uid;
+    private int flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +44,14 @@ public class SearchActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         Intent intent = getIntent();
         username = intent.getStringExtra("username");
-
-        searchUser(username);
-
+        uid = intent.getStringExtra("uid");
+        if(username != null)
+            searchUser(username);
+        if(uid != null)
+            if(intent.getStringExtra("search").equals("follower"))
+                searchFollower(uid);
+            else if(intent.getStringExtra("search").equals("following"))
+                searchFollowing(uid);
 
     }
 
@@ -73,6 +80,106 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 showMessage("Search Error");
+            }
+        });
+    }
+
+    private void searchFollower(String uid){
+        ref = database.getReference("Users").child(uid).child("followerUsers");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot user : dataSnapshot.getChildren()) {
+                    key.add(user.getKey());
+                }
+                if(key.size() == 0){
+                    adapter = new SearchUserAdapter(getApplicationContext(), list);
+                    recyclerView.setAdapter(adapter);
+                }
+                else {
+                    for (int i = 0; i < key.size(); i++) {
+                        ref2 = database.getReference("Users").child(key.get(i));
+                        final int finalI = i;
+                        ref2.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                String uri = dataSnapshot.child("photo").getValue(String.class);
+                                String email = dataSnapshot.child("email").getValue(String.class);
+                                String name = dataSnapshot.child("username").getValue(String.class);
+                                String userid = dataSnapshot.child("id").getValue(String.class);
+                                String pwd = dataSnapshot.child("password").getValue(String.class);
+                                UserDetail u = new UserDetail(name, email, pwd, userid);
+                                if (uri != null)
+                                    u.setPhoto(Uri.parse(uri));
+                                list.add(u);
+                                if (finalI == key.size() - 1) {
+                                    adapter = new SearchUserAdapter(getApplicationContext(), list);
+                                    recyclerView.setAdapter(adapter);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void searchFollowing(String uid){
+        ref = database.getReference("Users").child(uid).child("followingUsers");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot user : dataSnapshot.getChildren()) {
+                    key.add(user.getKey());
+                }
+                if(key.size() == 0){
+                    adapter = new SearchUserAdapter(getApplicationContext(), list);
+                    recyclerView.setAdapter(adapter);
+                }
+                else {
+                    for (int i = 0; i < key.size(); i++) {
+                        ref2 = database.getReference("Users").child(key.get(i));
+                        final int finalI = i;
+                        ref2.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                String uri = dataSnapshot.child("photo").getValue(String.class);
+                                String email = dataSnapshot.child("email").getValue(String.class);
+                                String name = dataSnapshot.child("username").getValue(String.class);
+                                String userid = dataSnapshot.child("id").getValue(String.class);
+                                String pwd = dataSnapshot.child("password").getValue(String.class);
+                                UserDetail u = new UserDetail(name, email, pwd, userid);
+                                if (uri != null)
+                                    u.setPhoto(Uri.parse(uri));
+                                list.add(u);
+                                if (finalI == key.size() - 1) {
+                                    adapter = new SearchUserAdapter(getApplicationContext(), list);
+                                    recyclerView.setAdapter(adapter);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }

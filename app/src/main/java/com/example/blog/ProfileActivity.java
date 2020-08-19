@@ -145,6 +145,26 @@ public class ProfileActivity extends AppCompatActivity
             }
         });
 
+        follower.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent2 = new Intent(ProfileActivity.this, SearchActivity.class);
+                intent2.putExtra("uid", currentUser.getUid());
+                intent2.putExtra("search", "follower");
+                startActivity(intent2);
+            }
+        });
+
+        following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent2 = new Intent(ProfileActivity.this, SearchActivity.class);
+                intent2.putExtra("uid", currentUser.getUid());
+                intent2.putExtra("search", "following");
+                startActivity(intent2);
+            }
+        });
+
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener listener = new BottomNavigationView.OnNavigationItemSelectedListener() {
