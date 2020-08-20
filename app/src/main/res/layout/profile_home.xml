@@ -42,17 +42,28 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/photo"
-                android:layout_width="167dp"
-                android:layout_height="97dp"
-                tools:srcCompat="@tools:sample/avatars[14]" />
+            <android.support.v7.widget.CardView
+                android:id="@+id/card"
+                android:background="@drawable/cycle_photo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:cardCornerRadius="50dp">
+
+                <ImageView
+                    android:id="@+id/photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:srcCompat="@tools:sample/avatars[14]" />
+
+
+            </android.support.v7.widget.CardView>
 
             <LinearLayout
                 android:id="@+id/child_linear11"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="15dp">
 
                 <TextView
                     android:id="@+id/username"
@@ -75,7 +86,8 @@
             android:id="@+id/child_linear2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="15dp">
 
             <TextView
             android:id="@+id/profile_followers"
@@ -93,11 +105,11 @@
             <Button
                 android:id="@+id/updateProfile"
                 android:layout_width="wrap_content"
-                android:padding="15dp"
-                android:layout_gravity="center"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:background="@drawable/button"
                 android:gravity="center"
+                android:padding="10dp"
                 android:text="Update Profile" />
         </LinearLayout>
     </LinearLayout>

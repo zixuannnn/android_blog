@@ -21,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -34,7 +35,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     public FirebaseUser user;
     public FirebaseDatabase database;
     public DatabaseReference refPost, refUser;
-    private String postId, email, title, uri;
+    private String postId, email, title, uri, userPhotoUri, detail, username;
 
     public PostListAdapter(Context context, List<Post> list){
         this.context = context;
@@ -56,17 +57,41 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
 
         Post p = list.get(index);
         this.uri = p.getImageUrl();
-        final String detail = p.getIntro();
+        this.detail = p.getIntro();
         this.postId = p.getPostKey();
         this.email = p.getmEmail();
         this.title = p.getName();
+        holder.postId = p.getPostKey();
+        holder.userEmail = p.getmEmail();
+        holder.uri = p.getImageUrl();
+        holder.title = p.getName();
+
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("Users");
+        Query query = ref.orderByChild("email").equalTo(email);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot user : dataSnapshot.getChildren()) {
+                    if (user.child("photo").exists()) {
+                        userPhotoUri = user.child("photo").getValue(String.class);
+                        Picasso.get().load(userPhotoUri).into(holder.userPhoto);
+                    }
+                    username = user.child("username").getValue(String.class);
+                    holder.name.setText(username);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         like(postId, holder.liked);
-        holder.name.setText(email.split("@")[0]);
         Picasso.get().load(uri).into(holder.image);
         //holder.details.setEllipsize(TextUtils.TruncateAt.valueOf("END"));
         holder.details.setText(detail);
@@ -96,7 +121,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                 context.startActivity(intent);
             }
         });
-
 
     }
 
@@ -134,9 +158,10 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     public class PostViewHolder extends RecyclerView.ViewHolder{
         public TextView name;
         public TextView details;
-        public ImageView image;
+        public ImageView image, userPhoto;
         public ImageView liked;
         public ImageView comment;
+        public String postId, userEmail, title, uri;
 
         public PostViewHolder(View view){
             super(view);
@@ -147,7 +172,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                     Intent intent = new Intent(context, PostDetailActivity.class);
                     intent.putExtra("username", name.getText().toString());
                     intent.putExtra("postId", postId);
-                    intent.putExtra("email", email);
+                    intent.putExtra("email", userEmail);
                     intent.putExtra("title", title);
                     intent.putExtra("uri", uri);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -155,6 +180,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                 }
             });
 
+            userPhoto = view.findViewById(R.id.photo);
             name = view.findViewById(R.id.name);
             image = view.findViewById(R.id.imagePost);
             liked = view.findViewById(R.id.like);

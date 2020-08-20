@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.blog.Model.Database;
@@ -30,7 +29,7 @@ public class PopUpActivity extends AppCompatActivity{
     private Button search;
     private ImageView picture;
     private EditText title, intro;
-    private ProgressBar progress;
+//    private ProgressBar progress;
     private FirebaseUser user;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
@@ -59,12 +58,12 @@ public class PopUpActivity extends AppCompatActivity{
         title = (EditText)findViewById(R.id.title);
         intro = findViewById(R.id.intro);
         picture = findViewById(R.id.picture);
-        progress = findViewById(R.id.progress);
+//        progress = findViewById(R.id.progress);
 
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progress.setVisibility(View.VISIBLE);
+//                progress.setVisibility(View.VISIBLE);
                 if(!title.getText().toString().isEmpty() && pickedImgUri != null){
                     uploadFile();
                     updateHomeUI();

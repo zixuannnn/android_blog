@@ -11,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,6 +49,7 @@ public class ProfileActivity extends AppCompatActivity
     private NavigationView navigationView;
     private BottomNavigationView bottomNavigation;
     private LinearLayout linear1, child_linear1, child_linear2, child_linear11;
+    private CardView card1, card2;
     private View header;
     private Bundle bundle;
     private FirebaseStorage storage;
@@ -75,9 +77,11 @@ public class ProfileActivity extends AppCompatActivity
         child_linear1 = linear1.findViewById(R.id.child_linear1);
         child_linear11 = child_linear1.findViewById(R.id.child_linear11);
         child_linear2 = linear1.findViewById(R.id.child_linear2);
+        card1 = header.findViewById(R.id.card);
+        card2 = linear1.findViewById(R.id.card);
 
-        photo1 = header.findViewById(R.id.userPhoto);
-        photo2 = child_linear1.findViewById(R.id.photo);
+        photo1 = card1.findViewById(R.id.userPhoto);
+        photo2 = card2.findViewById(R.id.photo);
 
         username = child_linear11.findViewById(R.id.username);
         email = child_linear11.findViewById(R.id.email_profile);

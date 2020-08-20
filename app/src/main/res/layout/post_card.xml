@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -42,13 +43,33 @@
         android:orientation="horizontal"
         android:padding="10dp">
 
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardPhoto"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            card_view:cardCornerRadius="50dp"
+            android:background="@drawable/cycle_photo"
+            android:layout_alignParentLeft="true">
+
+            <ImageView
+                android:id="@+id/photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignTop="@+id/cardPhoto" />
+
+
+        </android.support.v7.widget.CardView>
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Image Name"
-            android:layout_alignParentLeft="true"
+            android:layout_alignLeft="@+id/cardPhoto"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="7dp"
+            android:maxLength="5"
+            android:ellipsize="end"
+            android:text="author"
             android:textColor="#000"
             android:textSize="15dp" />
 
@@ -57,7 +78,8 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="50dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="40dp"
             android:background="@drawable/ic_like"
             tools:srcCompat="@tools:sample/avatars[14]" />
 
@@ -67,6 +89,7 @@
             android:layout_height="20dp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="7dp"
             android:background="@drawable/ic_comment"
             tools:srcCompat="@tools:sample/avatars[14]" />
 

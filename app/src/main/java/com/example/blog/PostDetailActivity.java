@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -39,8 +40,9 @@ public class PostDetailActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseUser user;
     private LinearLayout linearLayout1, linearLayout2;
+    private CardView card;
     private RelativeLayout relativeLayout;
-    private ImageView post, userPhoto, like;
+    private ImageView post, userPhoto, like, share;
     private TextView username, intro;
     private RecyclerView rv;
     private EditText comment;
@@ -71,11 +73,13 @@ public class PostDetailActivity extends AppCompatActivity {
         linearLayout1 = findViewById(R.id.linearLayout1);
         linearLayout2 = findViewById(R.id.linearLayout2);
         relativeLayout = linearLayout1.findViewById(R.id.relativeLayout);
+        card = relativeLayout.findViewById(R.id.card);
 
         post = findViewById(R.id.postImage);
-        userPhoto = relativeLayout.findViewById(R.id.userPhoto);
+        userPhoto = card.findViewById(R.id.userPhoto);
         username = relativeLayout.findViewById(R.id.userName);
         like = relativeLayout.findViewById(R.id.like);
+        share = relativeLayout.findViewById(R.id.share);
 
         intro = linearLayout1.findViewById(R.id.intro);
 
@@ -86,7 +90,10 @@ public class PostDetailActivity extends AppCompatActivity {
         list = new ArrayList<>();
 
         rv.setHasFixedSize(true);
-        rv.setLayoutManager(new LinearLayoutManager(PostDetailActivity.this));
+        LinearLayoutManager manager = new LinearLayoutManager(PostDetailActivity.this);
+        manager.setSmoothScrollbarEnabled(true);
+        rv.setNestedScrollingEnabled(false);
+        rv.setLayoutManager(manager);
 
         Picasso.get().load(uri).into(post);
         username.setText(userName);
@@ -195,6 +202,13 @@ public class PostDetailActivity extends AppCompatActivity {
                 intent.putExtra("email", email);
                 intent.putExtra("uid", uid);
                 startActivity(intent);
+            }
+        });
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMessage("Feature will be added later");
             }
         });
 
