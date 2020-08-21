@@ -32,7 +32,6 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Se
     public FirebaseUser user;
     public FirebaseDatabase database;
     public DatabaseReference refPost, refUser;
-    public String uid;
 
     public SearchUserAdapter(Context context, List<UserDetail> list){
         this.context = context;
@@ -55,7 +54,7 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Se
         UserDetail user = list.get(i);
         String username = user.getUsername();
         String email = user.getEmail();
-        uid = user.getId();
+        holder.uid = user.getId();
 
         Uri uri = user.getPhoto();
 
@@ -76,6 +75,7 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Se
         private TextView username;
         private TextView email;
         private LinearLayout linear1, linear2;
+        private String uid;
 
         public SearchUserViewHolder(@NonNull final View itemView) {
             super(itemView);

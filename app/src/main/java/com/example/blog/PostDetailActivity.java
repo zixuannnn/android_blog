@@ -43,7 +43,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private CardView card;
     private RelativeLayout relativeLayout;
     private ImageView post, userPhoto, like, share;
-    private TextView username, intro;
+    private TextView username, intro, time;
     private RecyclerView rv;
     private EditText comment;
     private ImageButton postComment;
@@ -82,6 +82,7 @@ public class PostDetailActivity extends AppCompatActivity {
         share = relativeLayout.findViewById(R.id.share);
 
         intro = linearLayout1.findViewById(R.id.intro);
+        time = linearLayout1.findViewById(R.id.time);
 
         comment = linearLayout2.findViewById(R.id.commentEdit);
         postComment = linearLayout2.findViewById(R.id.postComment);
@@ -121,6 +122,10 @@ public class PostDetailActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 intro.setText(dataSnapshot.child("intro").getValue(String.class));
+                int year = dataSnapshot.child("mTime").child("year").getValue(int.class);
+                int month = dataSnapshot.child("mTime").child("month").getValue(int.class);
+                int day = dataSnapshot.child("mTime").child("date").getValue(int.class);
+                time.setText((year+1900)+"-"+(month+1)+"-"+day);
             }
 
             @Override

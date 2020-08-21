@@ -2,6 +2,7 @@ package com.example.blog.Notification;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,17 +21,25 @@ public class ObserverAction implements Observer {
     }
 
     @Override
-    public void IncreaseFollowingFollower(final String follower, final String following, String following_email, String follower_email) {
+    public void IncreaseFollowingFollower(final String follower, final String following, final String following_email, final String follower_email, final Context context) {
         ref1= database.getReference("Users").child(follower);
         ref2 = database.getReference("Users").child(following);
 
         ref1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int numFollowing = dataSnapshot.child("following").getValue(int.class);
                 if(!dataSnapshot.child("followingUsers").child(following).exists()) {
-                    int numFollowing = dataSnapshot.child("following").getValue(int.class);
                     numFollowing += 1;
                     database.getReference("Users").child(follower).child("following").setValue(numFollowing);
+                    ref1.child("followingUsers").child(following).setValue(following_email);
+                    NotificationAfterNewFollow(follower_email+" starts to follow you right now", context, following);
+                }
+                else{
+                    numFollowing -= 1;
+                    database.getReference("Users").child(follower).child("following").setValue(numFollowing);
+                    ref1.child("followingUsers").child(following).removeValue();
+                    showMessage("Successfully unfollow", context);
                 }
             }
 
@@ -39,15 +48,20 @@ public class ObserverAction implements Observer {
 
             }
         });
-        ref1.child("followingUsers").child(following).setValue(following_email);
 
         ref2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int numFollower = dataSnapshot.child("follower").getValue(int.class);
                 if(!dataSnapshot.child("followerUsers").child(follower).exists()) {
-                    int numFollower = dataSnapshot.child("follower").getValue(int.class);
                     numFollower += 1;
                     database.getReference("Users").child(following).child("follower").setValue(numFollower);
+                    ref2.child("followerUsers").child(follower).setValue(follower_email);
+                }
+                else {
+                    numFollower -= 1;
+                    database.getReference("Users").child(following).child("follower").setValue(numFollower);
+                    ref2.child("followerUsers").child(follower).removeValue();
                 }
             }
 
@@ -56,8 +70,11 @@ public class ObserverAction implements Observer {
 
             }
         });
-        ref2.child("followerUsers").child(follower).setValue(follower_email);
 
+    }
+
+    private void showMessage(String s, Context context) {
+        Toast.makeText(context, s, Toast.LENGTH_LONG).show();
     }
 
 }

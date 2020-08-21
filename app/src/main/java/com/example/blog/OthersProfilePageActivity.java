@@ -93,8 +93,7 @@ public class OthersProfilePageActivity extends AppCompatActivity {
         follow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                observer.NotificationAfterNewFollow(currentUser.getEmail()+" is following you now",getApplicationContext(), intent.getStringExtra("uid"));
-                observer.IncreaseFollowingFollower(currentUser.getUid(), intent.getStringExtra("uid"), intent.getStringExtra("email"), currentUser.getEmail());
+                observer.IncreaseFollowingFollower(currentUser.getUid(), intent.getStringExtra("uid"), intent.getStringExtra("email"), currentUser.getEmail(), getApplicationContext());
                 updateLinearLayout();
             }
         });
