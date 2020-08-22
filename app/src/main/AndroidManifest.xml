@@ -105,6 +105,15 @@
 
         </activity>
 
+        <activity
+            android:name=".UpdateProfileActivity"
+            android:label="Update">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
         <service
             android:name=".Notification.FirebaseMessagingNotification"
             android:permission="com.google.android.c2dm.permission.SEND">

@@ -145,7 +145,7 @@ public class ProfileActivity extends AppCompatActivity
         updateProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showMessage("Feature will be added later");
+                updateToUpdateUI();
             }
         });
 
@@ -274,6 +274,13 @@ public class ProfileActivity extends AppCompatActivity
 
     private void updatePostListUI(){
         Intent intent = new Intent(ProfileActivity.this, PostListActivity.class);
+        startActivity(intent);
+    }
+
+    private void updateToUpdateUI(){
+        Intent intent = new Intent(ProfileActivity.this, UpdateProfileActivity.class);
+//        intent.putExtra("uri", photoUri.toString());
+//        intent.putExtra("username", username.getText().toString());
         startActivity(intent);
     }
 
