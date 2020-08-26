@@ -101,7 +101,7 @@ public class OthersProfilePageActivity extends AppCompatActivity {
         follower.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent2 = new Intent(OthersProfilePageActivity.this, SearchActivity.class);
+                Intent intent2 = new Intent(OthersProfilePageActivity.this, SearchFollowActivity.class);
                 intent2.putExtra("uid", intent.getStringExtra("uid"));
                 intent2.putExtra("search", "follower");
                 startActivity(intent2);
@@ -111,7 +111,7 @@ public class OthersProfilePageActivity extends AppCompatActivity {
         following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent2 = new Intent(OthersProfilePageActivity.this, SearchActivity.class);
+                Intent intent2 = new Intent(OthersProfilePageActivity.this, SearchFollowActivity.class);
                 intent2.putExtra("uid", intent.getStringExtra("uid"));
                 intent2.putExtra("search", "following");
                 startActivity(intent2);

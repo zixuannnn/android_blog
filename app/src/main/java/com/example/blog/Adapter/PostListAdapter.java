@@ -116,7 +116,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, CommentActivity.class);
-                intent.putExtra("postid", postId);
+                intent.putExtra("postid", holder.postId);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }

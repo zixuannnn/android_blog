@@ -1,15 +1,19 @@
 package com.example.blog;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.blog.Adapter.SearchUserAdapter;
+import com.example.blog.Fragment.SearchPostFragment;
+import com.example.blog.Fragment.SearchUserFragment;
+import com.example.blog.Model.Post;
 import com.example.blog.Model.UserDetail;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,39 +25,62 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener{
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private DatabaseReference ref, ref2;
-    private List<UserDetail> list = new ArrayList<>();
+    private DatabaseReference ref, ref2, ref3;
+    private ArrayList<String> list = new ArrayList<>();
+    private ArrayList<String> listPosts = new ArrayList<>();
+    private List<UserDetail> listUser = new ArrayList<>();
+    private List<Post> listPost = new ArrayList<>();
     private List<String> key = new ArrayList<>();
     private FirebaseDatabase database;
-    private String username, uid;
+    private String name, uid;
+    private BottomNavigationView bottomNavigation;
     private int flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_recycler_view);
-        recyclerView = (RecyclerView) findViewById(R.id.search_rv);
-
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
+        bottomNavigation = findViewById(R.id.search_nav);
 
         database = FirebaseDatabase.getInstance();
         Intent intent = getIntent();
-        username = intent.getStringExtra("username");
-        uid = intent.getStringExtra("uid");
-        if(username != null)
-            searchUser(username);
-        if(uid != null)
-            if(intent.getStringExtra("search").equals("follower"))
-                searchFollower(uid);
-            else if(intent.getStringExtra("search").equals("following"))
-                searchFollowing(uid);
+        name = intent.getStringExtra("username");
+        if(name != null) {
+            searchUser(name);
+            searchPosts(name);
+        }
 
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener listener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+            Bundle bundlePost = new Bundle();
+            bundlePost.putStringArrayList("post", listPosts);
+            Fragment fragment = new SearchPostFragment();
+            fragment.setArguments(bundlePost);
+
+            if(menuItem.getItemId() == R.id.post){
+                fragment = new SearchPostFragment();
+                fragment.setArguments(bundlePost);
+            }
+            else if(menuItem.getItemId() == R.id.user){
+                Bundle bundleUser = new Bundle();
+                bundleUser.putStringArrayList("user", list);
+                fragment = new SearchUserFragment();
+                fragment.setArguments(bundleUser);
+            }
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+            return true;
+        }
+    };
 
     private void searchUser(String username){
         ref = database.getReference("Users");
@@ -62,19 +89,10 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot user : dataSnapshot.getChildren()){
-                    String url = user.child("photo").getValue(String.class);
-                    String name = user.child("username").getValue(String.class);
-                    String key = user.child("id").getValue(String.class);
-                    String email = user.child("email").getValue(String.class);
-                    String pwd = user.child("password").getValue(String.class);
-                    UserDetail u = new UserDetail(name, email, pwd, key);
-                    if(url != null)
-                        u.setPhoto(Uri.parse(url));
-                    list.add(u);
+                    list.add(user.child("id").getValue(String.class));
                 }
+                bottomNavigation.setOnNavigationItemSelectedListener(listener);
 
-                adapter = new SearchUserAdapter(getApplicationContext(), list);
-                recyclerView.setAdapter(adapter);
             }
 
             @Override
@@ -84,102 +102,22 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    private void searchFollower(String uid){
-        ref = database.getReference("Users").child(uid).child("followerUsers");
-        ref.addValueEventListener(new ValueEventListener() {
+    private void searchPosts(String title){
+        ref3 = database.getReference("Posts");
+        Query query = ref3.orderByChild("name").startAt(title).endAt(title+"\uf8ff");
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot user : dataSnapshot.getChildren()) {
-                    key.add(user.getKey());
+                for(DataSnapshot user : dataSnapshot.getChildren()){
+                    listPosts.add(user.child("postKey").getValue(String.class));
                 }
-                if(key.size() == 0){
-                    adapter = new SearchUserAdapter(getApplicationContext(), list);
-                    recyclerView.setAdapter(adapter);
-                }
-                else {
-                    for (int i = 0; i < key.size(); i++) {
-                        ref2 = database.getReference("Users").child(key.get(i));
-                        final int finalI = i;
-                        ref2.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                String uri = dataSnapshot.child("photo").getValue(String.class);
-                                String email = dataSnapshot.child("email").getValue(String.class);
-                                String name = dataSnapshot.child("username").getValue(String.class);
-                                String userid = dataSnapshot.child("id").getValue(String.class);
-                                String pwd = dataSnapshot.child("password").getValue(String.class);
-                                UserDetail u = new UserDetail(name, email, pwd, userid);
-                                if (uri != null)
-                                    u.setPhoto(Uri.parse(uri));
-                                list.add(u);
-                                if (finalI == key.size() - 1) {
-                                    adapter = new SearchUserAdapter(getApplicationContext(), list);
-                                    recyclerView.setAdapter(adapter);
-                                }
-                            }
+                bottomNavigation.setOnNavigationItemSelectedListener(listener);
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void searchFollowing(String uid){
-        ref = database.getReference("Users").child(uid).child("followingUsers");
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot user : dataSnapshot.getChildren()) {
-                    key.add(user.getKey());
-                }
-                if(key.size() == 0){
-                    adapter = new SearchUserAdapter(getApplicationContext(), list);
-                    recyclerView.setAdapter(adapter);
-                }
-                else {
-                    for (int i = 0; i < key.size(); i++) {
-                        ref2 = database.getReference("Users").child(key.get(i));
-                        final int finalI = i;
-                        ref2.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                String uri = dataSnapshot.child("photo").getValue(String.class);
-                                String email = dataSnapshot.child("email").getValue(String.class);
-                                String name = dataSnapshot.child("username").getValue(String.class);
-                                String userid = dataSnapshot.child("id").getValue(String.class);
-                                String pwd = dataSnapshot.child("password").getValue(String.class);
-                                UserDetail u = new UserDetail(name, email, pwd, userid);
-                                if (uri != null)
-                                    u.setPhoto(Uri.parse(uri));
-                                list.add(u);
-                                if (finalI == key.size() - 1) {
-                                    adapter = new SearchUserAdapter(getApplicationContext(), list);
-                                    recyclerView.setAdapter(adapter);
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                showMessage("Search Error");
             }
         });
     }
@@ -191,5 +129,10 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        return false;
     }
 }

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -57,8 +58,11 @@ public class PostListActivity extends AppCompatActivity implements BottomNavigat
         currentUser = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
 
+        LinearLayoutManager manager = new GridLayoutManager(getApplicationContext(),2);
+        manager.setSmoothScrollbarEnabled(true);
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
+        recyclerView.setLayoutManager(manager);
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
@@ -81,7 +85,7 @@ public class PostListActivity extends AppCompatActivity implements BottomNavigat
             }
         });
 
-        ref =  FirebaseDatabase.getInstance().getReference("Posts");
+        ref =  database.getReference("Posts");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.blog.Model.Post;
 import com.example.blog.Model.UserDetail;
 import com.example.blog.OthersProfilePageActivity;
 import com.example.blog.R;
@@ -28,6 +29,7 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Se
 
     Context context;
     List<UserDetail> list;
+    List<Post> list2;
     public FirebaseAuth mAuth;
     public FirebaseUser user;
     public FirebaseDatabase database;
@@ -41,8 +43,8 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Se
     @NonNull
     @Override
     public SearchUserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_result, parent, false);
-
+        View view;
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_result, parent, false);
         SearchUserAdapter.SearchUserViewHolder viewHolder = new SearchUserAdapter.SearchUserViewHolder(view);
 
         return viewHolder;
@@ -79,7 +81,6 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Se
 
         public SearchUserViewHolder(@NonNull final View itemView) {
             super(itemView);
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
