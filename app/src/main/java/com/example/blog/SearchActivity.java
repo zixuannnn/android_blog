@@ -37,9 +37,8 @@ public class SearchActivity extends AppCompatActivity
     private List<Post> listPost = new ArrayList<>();
     private List<String> key = new ArrayList<>();
     private FirebaseDatabase database;
-    private String name, uid;
+    private String name;
     private BottomNavigationView bottomNavigation;
-    private int flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

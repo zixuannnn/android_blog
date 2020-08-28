@@ -24,8 +24,13 @@ import android.widget.Toast;
 
 import com.example.blog.Fragment.LikeFragment;
 import com.example.blog.Fragment.PostFragment;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -56,6 +61,7 @@ public class ProfileActivity extends AppCompatActivity
     private DrawerLayout drawer;
     private TextView username, email, following, follower;
     private Button updateProfile;
+    private GoogleSignInClient mGoogleSignInClient;
 
     private final static int REQUESCODE = 1;
 
@@ -103,6 +109,12 @@ public class ProfileActivity extends AppCompatActivity
 
         navigationView.setNavigationItemSelectedListener(this);
         bottomNavigation.setOnNavigationItemSelectedListener(listener);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         if(mAuth != null && currentUser != null){
             updateNavigationBar();
@@ -284,9 +296,25 @@ public class ProfileActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    private void handleGoogleLogout(){
+
+        // Firebase sign out
+        mAuth.signOut();
+
+        // Google sign out
+        mGoogleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                updatePostListUI();
+                showMessage("Successfully Logout");
+            }
+        });
+    }
+
     private void handleFirebaseLogout() {
-        FirebaseAuth.getInstance().signOut();
+        mAuth.signOut();
         finish();
+        updatePostListUI();
         showMessage("Successfully Logout");
     }
 

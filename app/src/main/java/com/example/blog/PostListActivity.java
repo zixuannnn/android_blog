@@ -58,10 +58,10 @@ public class PostListActivity extends AppCompatActivity implements BottomNavigat
         currentUser = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
 
+        recyclerView.setHasFixedSize(true);
         LinearLayoutManager manager = new GridLayoutManager(getApplicationContext(),2);
         manager.setSmoothScrollbarEnabled(true);
         recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(manager);
 
         bottomNavigation = findViewById(R.id.bottom_navigation);

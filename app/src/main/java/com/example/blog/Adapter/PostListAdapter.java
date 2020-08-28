@@ -91,7 +91,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             }
         });
 
-        like(postId, holder.liked);
+        like(holder.postId, holder.liked);
         Picasso.get().load(uri).into(holder.image);
         //holder.details.setEllipsize(TextUtils.TruncateAt.valueOf("END"));
         holder.details.setText(detail);
@@ -99,15 +99,15 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         holder.liked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refPost = database.getReference().child("Posts").child(postId).child("likes");
+                refPost = database.getReference().child("Posts").child(holder.postId).child("likes");
                 refUser = database.getReference().child("Users").child(user.getUid());
                 if(holder.liked.getTag().equals("like")) {
                     refPost.child(user.getUid()).setValue(user.getEmail());
-                    refUser.child("likes").child(postId).setValue(title);
+                    refUser.child("likes").child(holder.postId).setValue(title);
                 }
                 else{
                     refPost.child(user.getUid()).removeValue();
-                    refUser.child("likes").child(postId).removeValue();
+                    refUser.child("likes").child(holder.postId).removeValue();
                 }
             }
         });
