@@ -5,9 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,8 +58,7 @@ public class PostListActivity extends AppCompatActivity implements BottomNavigat
         database = FirebaseDatabase.getInstance();
 
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager manager = new GridLayoutManager(getApplicationContext(),2);
-        manager.setSmoothScrollbarEnabled(true);
+        StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(manager);
 
@@ -133,6 +131,9 @@ public class PostListActivity extends AppCompatActivity implements BottomNavigat
         else if(id == R.id.Me){
             updateProfileUI();
         }
+        else if(id == R.id.Message){
+            updateMessageUI();
+        }
 
         return true;
     }
@@ -155,6 +156,17 @@ public class PostListActivity extends AppCompatActivity implements BottomNavigat
         }
         else{
             showMessage("Sorry, you are currently signin with "+currentUser.getEmail());
+        }
+    }
+
+    private void updateMessageUI(){
+        if(currentUser == null) {
+            Intent intent = new Intent(PostListActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+        else{
+            Intent intent = new Intent(PostListActivity.this, MessagePageActivity.class);
+            startActivity(intent);
         }
     }
 

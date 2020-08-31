@@ -4,16 +4,18 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class ObserverAction implements Observer {
+public class ObserverAction implements FollowObserver, LikeObserver {
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference ref1, ref2;
+    private DatabaseReference refPost, refUser;
     @Override
     public void NotificationAfterNewFollow(String message, Context context, String topic) {
         PushNotification push = new PushNotification();
@@ -56,7 +58,7 @@ public class ObserverAction implements Observer {
                 if(!dataSnapshot.child("followerUsers").child(follower).exists()) {
                     numFollower += 1;
                     database.getReference("Users").child(following).child("follower").setValue(numFollower);
-                    ref2.child("followerUsers").child(follower).setValue(follower_email);
+                    ref2.child("followerUsers").child(follower).setValue(false);
                 }
                 else {
                     numFollower -= 1;
@@ -77,4 +79,16 @@ public class ObserverAction implements Observer {
         Toast.makeText(context, s, Toast.LENGTH_LONG).show();
     }
 
+    public void notifyNewLikes(FirebaseUser user, String author, String tag, String title) {
+        refPost = database.getReference().child("Posts").child(author).child("likes");
+        refUser = database.getReference().child("Users").child(user.getUid());
+        if(tag.equals("like")) {
+            refPost.child(user.getUid()).setValue(false);
+            refUser.child("likes").child(author).setValue(title);
+        }
+        else{
+            refPost.child(user.getUid()).removeValue();
+            refUser.child("likes").child(author).removeValue();
+        }
+    }
 }

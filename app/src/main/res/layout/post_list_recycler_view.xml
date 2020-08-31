@@ -80,7 +80,8 @@
             android:layout_gravity="bottom"
             app:itemBackground="@color/lightGray"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:menu="@menu/bottom_nav_menu">
+            app:menu="@menu/bottom_nav_menu"
+            app:labelVisibilityMode="labeled">
 
         </android.support.design.widget.BottomNavigationView>
 

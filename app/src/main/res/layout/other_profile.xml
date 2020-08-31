@@ -26,11 +26,19 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <android.support.v7.widget.CardView
+                android:id="@+id/card"
+                android:background="@drawable/cycle_photo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:cardCornerRadius="50dp">
+
             <ImageView
                 android:id="@+id/photo"
-                android:layout_width="167dp"
-                android:layout_height="97dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 tools:srcCompat="@tools:sample/avatars[14]" />
+            </android.support.v7.widget.CardView>
 
             <LinearLayout
                 android:id="@+id/child_linear11"

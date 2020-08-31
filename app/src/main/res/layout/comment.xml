@@ -28,7 +28,7 @@
             android:layout_height="30dp"
             android:text="user1"
             android:textColor="#D3D3D3"
-            android:textSize="12dp"
+            android:textSize="14dp"
             android:padding="8dp"
             android:gravity="left"/>
 
@@ -40,7 +40,7 @@
             android:padding="8dp"
             android:text="date"
             android:textColor="#D3D3D3"
-            android:textSize="12dp" />
+            android:textSize="14dp" />
 
     </LinearLayout>
 

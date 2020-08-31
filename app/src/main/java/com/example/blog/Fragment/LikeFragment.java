@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.example.blog.Adapter.PostListAdapter;
 import com.example.blog.Model.Post;
@@ -28,7 +27,6 @@ import java.util.List;
 public class LikeFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private FrameLayout frameLayout;
     private PostListAdapter adapter;
     private FirebaseDatabase database;
     private DatabaseReference ref;

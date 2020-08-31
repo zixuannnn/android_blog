@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.blog.CommentActivity;
 import com.example.blog.Model.Post;
+import com.example.blog.Notification.ObserverAction;
 import com.example.blog.PostDetailActivity;
 import com.example.blog.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +37,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     public FirebaseDatabase database;
     public DatabaseReference refPost, refUser;
     private String postId, email, title, uri, userPhotoUri, detail, username;
+    private ObserverAction observer;
 
     public PostListAdapter(Context context, List<Post> list){
         this.context = context;
@@ -66,7 +68,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         holder.uri = p.getImageUrl();
         holder.title = p.getName();
 
-
+        observer = new ObserverAction();
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
@@ -93,22 +95,12 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
 
         like(holder.postId, holder.liked);
         Picasso.get().load(uri).into(holder.image);
-        //holder.details.setEllipsize(TextUtils.TruncateAt.valueOf("END"));
         holder.details.setText(detail);
 
         holder.liked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refPost = database.getReference().child("Posts").child(holder.postId).child("likes");
-                refUser = database.getReference().child("Users").child(user.getUid());
-                if(holder.liked.getTag().equals("like")) {
-                    refPost.child(user.getUid()).setValue(user.getEmail());
-                    refUser.child("likes").child(holder.postId).setValue(title);
-                }
-                else{
-                    refPost.child(user.getUid()).removeValue();
-                    refUser.child("likes").child(holder.postId).removeValue();
-                }
+                observer.notifyNewLikes(user, holder.postId, holder.liked.getTag().toString(), title);
             }
         });
 

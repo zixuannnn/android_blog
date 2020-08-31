@@ -2,7 +2,7 @@ package com.example.blog.Notification;
 
 import android.content.Context;
 
-public interface Observer {
+public interface FollowObserver {
 
     void NotificationAfterNewFollow(String follower, Context context, String topic);
 

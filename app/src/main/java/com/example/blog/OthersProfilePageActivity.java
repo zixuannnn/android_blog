@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.example.blog.Fragment.LikeFragment;
 import com.example.blog.Fragment.PostFragment;
 import com.example.blog.Model.UserDetail;
-import com.example.blog.Notification.Observer;
+import com.example.blog.Notification.FollowObserver;
 import com.example.blog.Notification.ObserverAction;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,7 +42,7 @@ public class OthersProfilePageActivity extends AppCompatActivity {
     private Button follow;
     private Intent intent;
     private Bundle bundle;
-    private Observer observer;
+    private FollowObserver observer;
     private FirebaseUser currentUser;
     private FirebaseAuth auth;
     private List<UserDetail> list;
