@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.blog.Fragment.NewFollowerFragment;
+import com.example.blog.Fragment.NewLikeFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -50,7 +51,7 @@ public class MessagePageActivity extends AppCompatActivity {
                 fragment = new NewFollowerFragment();
             }
             else if(menuItem.getItemId() == R.id.like){
-                showMessage("Feature will be added later");
+                fragment = new NewLikeFragment();
             }
             else if(menuItem.getItemId() == R.id.comment){
                 showMessage("Feature will be added later");

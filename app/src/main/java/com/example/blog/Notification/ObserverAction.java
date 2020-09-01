@@ -11,6 +11,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Date;
+
 public class ObserverAction implements FollowObserver, LikeObserver {
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -79,15 +81,18 @@ public class ObserverAction implements FollowObserver, LikeObserver {
         Toast.makeText(context, s, Toast.LENGTH_LONG).show();
     }
 
-    public void notifyNewLikes(FirebaseUser user, String author, String tag, String title) {
-        refPost = database.getReference().child("Posts").child(author).child("likes");
+    public void notifyNewLikes(FirebaseUser user, String author, String tag, String title, Date date) {
+        refPost = database.getReference().child("Posts").child(author);
         refUser = database.getReference().child("Users").child(user.getUid());
         if(tag.equals("like")) {
-            refPost.child(user.getUid()).setValue(false);
+            String time = ""+ (date.getYear()+1900)+"-"+(date.getMonth()+1)+"-"+date.getDate();
+            refPost.child("likes").child(user.getUid()).setValue(false);
+            refPost.child("likesDate").child(user.getUid()).setValue(time);
             refUser.child("likes").child(author).setValue(title);
         }
         else{
-            refPost.child(user.getUid()).removeValue();
+            refPost.child("likes").child(user.getUid()).removeValue();
+            refPost.child("likesDate").child(user.getUid()).removeValue();
             refUser.child("likes").child(author).removeValue();
         }
     }

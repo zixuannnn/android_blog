@@ -26,6 +26,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostViewHolder> {
@@ -100,7 +102,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         holder.liked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                observer.notifyNewLikes(user, holder.postId, holder.liked.getTag().toString(), title);
+                Date date = Calendar.getInstance().getTime();
+                observer.notifyNewLikes(user, holder.postId, holder.liked.getTag().toString(), title, date);
             }
         });
 

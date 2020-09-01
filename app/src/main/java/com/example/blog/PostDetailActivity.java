@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.blog.Adapter.CommentAdapter;
 import com.example.blog.Model.Comment;
 import com.example.blog.Model.Database;
+import com.example.blog.Notification.ObserverAction;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -51,6 +52,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private String postId, userName, email, title, uri, uid;
     private List<Comment> list;
     private RecyclerView.Adapter adapter;
+    private ObserverAction observer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +91,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
         rv = findViewById(R.id.comment_rv);
         list = new ArrayList<>();
+        observer = new ObserverAction();
 
         rv.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(PostDetailActivity.this);
@@ -176,15 +179,8 @@ public class PostDetailActivity extends AppCompatActivity {
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refUser = database.getReference().child("Users").child(user.getUid());
-                if(like.getTag().equals("like")) {
-                    refPostLike.child(user.getUid()).setValue(user.getEmail());
-                    refUser.child("likes").child(postId).setValue(title);
-                }
-                else{
-                    refPostLike.child(user.getUid()).removeValue();
-                    refUser.child("likes").child(postId).removeValue();
-                }
+                Date date = Calendar.getInstance().getTime();
+                observer.notifyNewLikes(user, postId, like.getTag().toString(), title, date);
             }
         });
 
@@ -231,8 +227,9 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     private void like(String postId, final ImageView liked){
+//        Date date = Calendar.getInstance().getTime();
+//        observer.notifyNewLikes(user, postId, liked.getTag().toString(), title, date);
         refPosts = database.getReference().child("Posts").child(postId).child("likes");
-
         refPosts.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

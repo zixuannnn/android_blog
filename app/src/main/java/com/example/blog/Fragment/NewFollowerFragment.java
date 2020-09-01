@@ -48,6 +48,7 @@ public class NewFollowerFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
 
         recyclerView.setHasFixedSize(true);
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         list = new ArrayList<>();
